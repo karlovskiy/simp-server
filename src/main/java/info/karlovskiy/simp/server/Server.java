@@ -39,7 +39,6 @@ public class Server {
                     try {
                         connectionsPool.add(thread);
                     } catch (RejectedExecutionException ree) {
-                        ree.printStackTrace();
                         connection.writeError(ErrorType.SERVER_UNAVAILABLE);
                         logger.severe("New connection rejected: max connections reached");
                         connection.close();

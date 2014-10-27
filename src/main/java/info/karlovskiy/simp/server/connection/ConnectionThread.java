@@ -30,8 +30,8 @@ public class ConnectionThread implements Runnable {
 
     @Override
     public void run() {
+        ConcurrentHashMap<String, Connection> connectedUsers = Server.getConnectedUsers();
         try {
-            ConcurrentHashMap<String, Connection> connectedUsers = Server.getConnectedUsers();
             String user = connection.readUserConnected();
             Connection existsConnection = connectedUsers.putIfAbsent(user, connection);
             if (existsConnection != null) {
@@ -62,24 +62,23 @@ public class ConnectionThread implements Runnable {
         } catch (Throwable e) {
             logger.log(Level.SEVERE, "Connection error", e);
         } finally {
+            String user = connectionUser.get();
+            if (user != null) {
+                logger.info("Disconnecting user " + user);
+                try {
+                    connectedUsers.remove(user);
+                    for (Connection conn : connectedUsers.values()) {
+                        conn.writeUserConnectedOrDisconnected(ResponseType.USER_DISCONNECTED, user);
+                    }
+                } catch (Throwable e) {
+                    logger.log(Level.SEVERE, "Error disconnecting user " + user, e);
+                }
+            }
             try {
-                userDisconnected();
-            } catch (Throwable e) {
-                logger.log(Level.SEVERE, "Error disconnecting user", e);
+                connection.close();
+            } catch (IOException e) {
+                logger.log(Level.SEVERE, "Error closing connection", e);
             }
         }
-    }
-
-    private void userDisconnected() throws IOException {
-        ConcurrentHashMap<String, Connection> connectedUsers = Server.getConnectedUsers();
-        String user = connectionUser.get();
-        if (user != null) {
-            connectedUsers.remove(user);
-            for (Connection conn : connectedUsers.values()) {
-                conn.writeUserConnectedOrDisconnected(ResponseType.USER_DISCONNECTED, user);
-            }
-        }
-        logger.severe("Disconnecting user " + (user != null ? user : "unknown"));
-        connection.close();
     }
 }

@@ -25,15 +25,15 @@ public class ServerProperties {
     }
 
     public int getPort() {
-        return Integer.parseInt(properties.getProperty(SERVER_PORT, "36484"));
+        return Integer.parseInt(properties.getProperty(SERVER_PORT, "7777"));
     }
 
     public int getMaxConnections() {
-        return Integer.valueOf(properties.getProperty(MAX_CONNECTIONS, "64"));
+        return Integer.parseInt(properties.getProperty(MAX_CONNECTIONS, "64"));
     }
 
     public int getKeepAlive() {
-        return Integer.valueOf(properties.getProperty(CONNECTION_KEEP_ALIVE, "60"));
+        return Integer.parseInt(properties.getProperty(CONNECTION_KEEP_ALIVE, "30"));
     }
 
     private static class ServerPropertiesHolder {
