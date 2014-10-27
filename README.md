@@ -1,4 +1,4 @@
-simp-server
+SIMP server
 ===========
 
 Simple message protocol (SIMP) server
