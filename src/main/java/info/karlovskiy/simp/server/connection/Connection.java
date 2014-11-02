@@ -74,7 +74,7 @@ public class Connection implements Closeable {
         return user;
     }
 
-    public String readMessage() throws IOException {
+    public byte[] readMessage() throws IOException {
         byte[] buff = new byte[4];
         int bytesRead = 0;
         while (bytesRead != buff.length) {
@@ -94,8 +94,7 @@ public class Connection implements Closeable {
             }
             bytesRead += read;
         }
-        String message = new String(buff, ENCODING);
-        return message;
+        return buff;
     }
 
     public String readUserConnected() throws IOException {
@@ -137,16 +136,15 @@ public class Connection implements Closeable {
         out.flush();
     }
 
-    public void writeMessage(String user, String message) throws IOException {
+    public void writeMessage(String user, byte[] message) throws IOException {
         byte[] header = new byte[]{1, ResponseType.MESSAGE.getCode()};
         out.write(header);
         byte[] buff = user.getBytes(ENCODING);
         out.write(buff.length);
         out.write(buff);
-        byte[] msgbuff = message.getBytes(ENCODING);
-        byte[] msgbuffl = ByteBuffer.allocate(4).putInt(msgbuff.length).array();
+        byte[] msgbuffl = ByteBuffer.allocate(4).putInt(message.length).array();
         out.write(msgbuffl);
-        out.write(msgbuff);
+        out.write(message);
         out.flush();
     }
 

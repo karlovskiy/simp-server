@@ -53,7 +53,7 @@ public class ConnectionThread implements Runnable {
                     break;
                 } else if (requestType == RequestType.MESSAGE) {
                     String messageUser = connection.readUser();
-                    String message = connection.readMessage();
+                    byte[] message = connection.readMessage();
                     for (Connection conn : connectedUsers.values()) {
                         conn.writeMessage(messageUser, message);
                     }
