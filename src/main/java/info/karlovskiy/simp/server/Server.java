@@ -3,6 +3,7 @@ package info.karlovskiy.simp.server;
 import info.karlovskiy.simp.server.connection.Connection;
 import info.karlovskiy.simp.server.connection.ConnectionThread;
 import info.karlovskiy.simp.server.connection.ConnectionsPool;
+import info.karlovskiy.simp.server.jmx.Administration;
 import info.karlovskiy.simp.server.response.ErrorType;
 
 import java.io.IOException;
@@ -27,6 +28,8 @@ public class Server {
     public static void main(String[] args) {
 
         ConnectionsPool connectionsPool = new ConnectionsPool();
+        Administration administration = Administration.getInstance();
+        administration.setConnectionsPool(connectionsPool);
         int port = ServerProperties.getInstance().getPort();
         try (ServerSocket s = new ServerSocket(port)) {
             logger.info("Simp server started on port " + port);

@@ -1,5 +1,6 @@
 package info.karlovskiy.simp.server.connection;
 
+import info.karlovskiy.simp.server.ServerUtils;
 import info.karlovskiy.simp.server.request.RequestType;
 import info.karlovskiy.simp.server.response.ErrorType;
 import info.karlovskiy.simp.server.response.ResponseType;
@@ -11,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.nio.ByteBuffer;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -84,7 +84,7 @@ public class Connection implements Closeable {
             }
             bytesRead += read;
         }
-        int messageLength = ByteBuffer.wrap(buff).getInt();
+        int messageLength = ServerUtils.toInt(buff);
         buff = new byte[messageLength];
         bytesRead = 0;
         while (bytesRead != buff.length) {
@@ -128,7 +128,7 @@ public class Connection implements Closeable {
             }
         }
         byte[] buff = sb.toString().getBytes(ENCODING);
-        byte[] len = ByteBuffer.allocate(2).putShort((short) buff.length).array();
+        byte[] len = ServerUtils.toBytesArray((short) buff.length);
         byte[] header = new byte[]{1, ResponseType.CONNECT_SUCCESSFULLY.getCode()};
         out.write(header);
         out.write(len);
@@ -142,7 +142,7 @@ public class Connection implements Closeable {
         byte[] buff = user.getBytes(ENCODING);
         out.write(buff.length);
         out.write(buff);
-        byte[] msgbuffl = ByteBuffer.allocate(4).putInt(message.length).array();
+        byte[] msgbuffl = ServerUtils.toBytesArray(message.length);
         out.write(msgbuffl);
         out.write(message);
         out.flush();

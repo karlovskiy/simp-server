@@ -51,4 +51,32 @@ public class ConnectionsPool {
         threadPool.execute(task);
     }
 
+    public int getMaxConnections() {
+        return threadPool.getMaximumPoolSize();
+    }
+
+    public void setMaxConnections(int maxConnections) {
+        threadPool.setMaximumPoolSize(maxConnections);
+    }
+
+    public int getAlwaysAliveConnections() {
+        return threadPool.getCorePoolSize();
+    }
+
+    public void setAlwaysAliveConnections(int alwaysAliveConnections) {
+        threadPool.setCorePoolSize(alwaysAliveConnections);
+    }
+
+    public long getInactiveConnectionKeepAliveSeconds(){
+        return threadPool.getKeepAliveTime(TimeUnit.SECONDS);
+    }
+
+    public void setInactiveConnectionKeepAliveSeconds(long inactiveConnectionKeepAliveSeconds){
+        threadPool.setKeepAliveTime(inactiveConnectionKeepAliveSeconds, TimeUnit.SECONDS);
+    }
+
+    public int getOnlineUsersCount(){
+        return threadPool.getActiveCount();
+    }
+
 }
