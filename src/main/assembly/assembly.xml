@@ -18,9 +18,14 @@
             <directory>${project.build.scriptSourceDirectory}</directory>
             <outputDirectory></outputDirectory>
             <includes>
-                <include>startup.*</include>
+                <include>start.sh</include>
+                <include>stop.sh</include>
                 <include>server.properties</include>
             </includes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/src/main/daemon</directory>
+            <outputDirectory>daemon</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>${project.build.directory}</directory>

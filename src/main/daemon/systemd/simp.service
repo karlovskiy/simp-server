@@ -1,0 +1,14 @@
+[Unit]
+Description=Simp Server Daemon
+After=network.target
+
+[Service]
+Type=forking
+Environment=JAVA_HOME=/opt/java SIMP_HOME=/opt/servers/simp
+SuccessExitStatus=143
+ExecStart=/bin/sh ${SIMP_HOME}/start.sh
+ExecStop=-/bin/sh ${SIMP_HOME}/stop.sh
+User=root
+
+[Install]
+WantedBy=multi-user.target

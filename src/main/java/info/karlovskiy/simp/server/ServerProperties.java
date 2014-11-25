@@ -1,7 +1,9 @@
 package info.karlovskiy.simp.server;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
  * Here will be javadoc
@@ -11,8 +13,11 @@ import java.util.Properties;
  */
 public class ServerProperties {
 
+    private static final Logger logger = Logger.getLogger(ServerProperties.class.getName());
+
     public static final String ENCODING = "UTF-8";
 
+    private static final String PROPERTIES_FILE = "server.properties";
     private static final String SERVER_PORT = "server_port";
     private static final String MAX_CONNECTIONS = "max_connections";
     private static final String CONNECTION_KEEP_ALIVE = "connection_keep_alive";
@@ -41,9 +46,12 @@ public class ServerProperties {
     }
 
     private ServerProperties() {
+        String propertiesFile = System.getProperty("simp.home") + File.separator + PROPERTIES_FILE;
         try {
-            properties.load(new FileInputStream("server.properties"));
+            properties.load(new FileInputStream(propertiesFile));
+            logger.info("Properties from " + propertiesFile + " successfully loaded.");
         } catch (Throwable ignored) {
+            logger.warning("Properties file " + propertiesFile + " not found. Using default properties.");
         }
     }
 
