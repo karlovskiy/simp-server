@@ -62,8 +62,22 @@ This response from the server on another users messages.
 -----------------------------------------------------------------
 | Protocol | Response | Username |          | Message |         |
 | Version  | Type     | length   | Username | length  | Message |
-| 1 byte   | 1 byte   | 1 byte   |          | 2 bytes |         |
+| 1 byte   | 1 byte   | 1 byte   |          | 4 bytes |         |
 -----------------------------------------------------------------
 ```
 
+#### *Request type*
+Type | Code
+--- | :---:
+CONNECT | 0
+DISCONNECT | 1
+MESSAGE | 2
 
+#### *Response type*
+Type | Code
+--- | :---:
+ERROR | 0
+CONNECT_SUCCESSFULLY | 1
+USER_CONNECTED | 2
+USER_DISCONNECTED | 3
+MESSAGE | 4
