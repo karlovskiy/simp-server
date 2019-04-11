@@ -6,31 +6,46 @@ SIMP server is the lightweight blocking I/O server for SIMP messaging protocol.
 
 SIMP is an lightweight binary protocol for chat messages.
 
-#### *Connect* and *Disconnect*
+#### *Connect request* 
 
-This request types can be used to connect to the chat server or disconnection from the chat server.
+This request types can be used to connect to the chat server.
 
 ```
---------------------------------------------
-| Protocol | Request | Username |          |
-| Version  | Type    | length   | Username |
-| 1 byte   | 1 byte  | 1 byte   |          |
---------------------------------------------
+---------------------------------------------
+| Protocol | Request  | Username |          |
+| Version  | Type     | length   | Username |
+| 1 byte   | 1 byte   | 1 byte   |          |
+| 00000001 | 00000000 |          |          |
+---------------------------------------------
 ```
 
-#### *Message*
+#### *Disconnect request*
+
+This request types can be used to disconnection from the chat server.
+
+```
+---------------------------------------------
+| Protocol | Request  | Username |          |
+| Version  | Type     | length   | Username |
+| 1 byte   | 1 byte   | 1 byte   |          |
+| 00000001 | 00000001 |          |          |
+---------------------------------------------
+```
+
+#### *Message request*
 
 This type of request can be used to send messages to the chat server.
 
 ```
-----------------------------------------------------------------
-| Protocol | Request | Username |          | Message |         |
-| Version  | Type    | length   | Username | length  | Message |
-| 1 byte   | 1 byte  | 1 byte   |          | 2 bytes |         |
-----------------------------------------------------------------
+-----------------------------------------------------------------
+| Protocol | Request  | Username |          | Message |         |
+| Version  | Type     | length   | Username | length  | Message |
+| 1 byte   | 1 byte   | 1 byte   |          | 2 bytes |         |
+| 00000001 | 00000010 |          |          |         |         |
+-----------------------------------------------------------------
 ```
 
-#### *Connect successfully*
+#### *Connect successfully response*
 
 This is a response from the server after successfully connection established.
 
@@ -39,22 +54,37 @@ This is a response from the server after successfully connection established.
 | Protocol | Response | Users   | Users   |
 | Version  | Type     | length  | online  |
 | 1 byte   | 1 byte   | 2 bytes | current |
+| 00000001 | 00000001 |         |         |
 -------------------------------------------
 ```
 
-#### *User connected* and *User disconnected*
+#### *User connected response*
 
-This response types from the server aftre another user connected or disconnected.
+This response types from the server after another user connected.
 
 ```
 ---------------------------------------------
 | Protocol | Response | Username |          |
 | Version  | Type     | length   | Username |
 | 1 byte   | 1 byte   | 1 byte   |          |
+| 00000001 | 00000010 |         |         |
 ---------------------------------------------
 ```
 
-#### *Message*
+#### *User disconnected response*
+
+This response types from the server after another user disconnected.
+
+```
+---------------------------------------------
+| Protocol | Response | Username |          |
+| Version  | Type     | length   | Username |
+| 1 byte   | 1 byte   | 1 byte   |          |
+| 00000001 | 00000011 |          |          |
+---------------------------------------------
+```
+
+#### *Message response*
 
 This response from the server on another users messages.
 
@@ -63,21 +93,22 @@ This response from the server on another users messages.
 | Protocol | Response | Username |          | Message |         |
 | Version  | Type     | length   | Username | length  | Message |
 | 1 byte   | 1 byte   | 1 byte   |          | 4 bytes |         |
+| 00000001 | 00000100 |          |          |         |         |
 -----------------------------------------------------------------
 ```
 
 #### *Request type*
-Type | Code
---- | :---:
-CONNECT | 0
-DISCONNECT | 1
-MESSAGE | 2
+Type | Dec | Binary
+--- | :---: | :---:
+CONNECT | 0 | 00000000
+DISCONNECT | 1 | 00000001
+MESSAGE | 2 | 00000010
 
 #### *Response type*
-Type | Code
---- | :---:
-ERROR | 0
-CONNECT_SUCCESSFULLY | 1
-USER_CONNECTED | 2
-USER_DISCONNECTED | 3
-MESSAGE | 4
+Type | Dec | Binary
+--- | :---: | :---:
+ERROR | 0 | 00000000
+CONNECT_SUCCESSFULLY | 1 | 00000001
+USER_CONNECTED | 2 | 00000010
+USER_DISCONNECTED | 3 | 00000011
+MESSAGE | 4 | 00000100
